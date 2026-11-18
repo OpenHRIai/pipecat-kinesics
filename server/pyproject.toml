@@ -1,0 +1,26 @@
+[project]
+name = "pipecat-kinesics-server"
+version = "0.1.0"
+description = "Turn cues for a cascaded Pipecat bot: the bot-turn-cue RTVI server message (prototype)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pipecat-ai[webrtc,runner,deepgram,cartesia,openai,silero]>=1.12.0",
+    "numpy>=1.26,<2.3",
+    "loguru",
+    "python-dotenv",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# Two packages are installed: turncue (the turn-cue processors) and kinesics_core (what they build on).
+[tool.setuptools]
+packages = ["turncue", "kinesics_core"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

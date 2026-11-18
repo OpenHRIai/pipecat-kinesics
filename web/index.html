@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>pipecat-kinesics v.0.0.1</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="views">
+      <div id="view" class="pane"><div class="label">avatar</div></div>
+      <div id="robot-view" class="pane">
+        <div class="label">robot view: simulated Unitree G1 <span id="robot-status" class="muted">loading</span></div>
+      </div>
+    </div>
+    <audio id="bot-audio" autoplay playsinline></audio>
+    <div id="panel">
+      <h1>pipecat-kinesics <span class="muted">v.0.0.1</span></h1>
+      <div class="row">
+        <span title="Which bodies show the model's gestures. Each ticked one gets its own pane, side by side. Only ticked ones are drawn and simulated.">embodiments</span>
+        <label><input id="body-robot" type="checkbox" /> robot: Unitree G1 (simulated)</label>
+        <label><input id="body-avatar" type="checkbox" /> avatar</label>
+      </div>
+      <div class="row">
+        <button id="connect">Connect</button>
+        <button id="ping" disabled>Ping (measure e2e)</button>
+        <span id="state" class="pill">disconnected</span>
+      </div>
+      <div class="row">
+        <span>microphone</span>
+        <span id="mic-state" class="pill">not asked yet</span>
+        <span id="mic-meter" title="How loud your microphone is right now, measured in this page."><span id="mic-bar"></span></span>
+        <button id="mic-mute" disabled>Mute</button>
+      </div>
+      <div class="row muted" id="mic-help">Press Connect, then allow the microphone when the browser asks. Use headphones, or the model hears its own voice.</div>
+      <div class="row">
+        <label>trim <input id="trim" type="range" min="-200" max="200" step="5" value="0" /> <span id="trimv">0</span> ms</label>
+      </div>
+      <div class="row avatar-only">
+        <label><input id="zup" type="checkbox" /> Z-up → Y-up root fix</label>
+        <label><input id="rootxz" type="checkbox" /> apply root XZ</label>
+        <label><input id="skel" type="checkbox" /> skeleton overlay</label>
+      </div>
+      <div class="row robot-only">
+        <button id="robot-reset" disabled>Reset robot</button>
+        <label title="Keeps the pelvis fixed in space, as if the robot hung from a gantry. The simulated robot has no balance control."><input id="robot-hold" type="checkbox" checked /> hold pelvis in place</label>
+      </div>
+      <table id="readout">
+        <tbody>
+          <tr><th colspan="2">conversation</th></tr>
+          <tr><td>engine on the server</td><td id="r-engine">–</td></tr>
+          <tr><td title="How loud the microphone audio is when it reaches the model on the server, averaged over the last second. Proof that your voice gets there.">microphone level the model hears</td><td id="r-heard">–</td></tr>
+          <tr><td title="When on, the server saves this session: your microphone audio, the model's audio, the pose messages, and timing at every stage. This page also sends its own readings once per second. The files stay on the machine that runs the bot and are copied to this Mac.">session recording</td><td id="r-rec">–</td></tr>
+          <tr><th colspan="2">audio playout delay (getStats)</th></tr>
+          <tr><td>jitter buffer</td><td id="r-jb">–</td></tr>
+          <tr><td>RTT / 2</td><td id="r-rtt">–</td></tr>
+          <tr><td>media-playout</td><td id="r-po">–</td></tr>
+          <tr><td><b>total estimate</b></td><td id="r-total">–</td></tr>
+          <tr><th colspan="2">motion stream</th></tr>
+          <tr><td>msgs/s · bytes/s</td><td id="r-rate">–</td></tr>
+          <tr><td>arrival offset median · jitter</td><td id="r-off">–</td></tr>
+          <tr><td>buffer ahead of playhead</td><td id="r-ahead">–</td></tr>
+          <tr><td>late frames · starved</td><td id="r-late">–</td></tr>
+          <tr><td>flags</td><td id="r-flags">–</td></tr>
+          <tr><th colspan="2">measured sync (audio ⇄ jaw cross-correlation)</th></tr>
+          <tr><td><b>motion lead/lag</b></td><td id="r-lag">–</td></tr>
+          <tr><th colspan="2">ping → first audio</th></tr>
+          <tr><td>e2e response latency</td><td id="r-e2e">–</td></tr>
+          <tr><td>first speaking motion msg</td><td id="r-e2em">–</td></tr>
+          <tr class="robot-only"><th colspan="2">robot view (last 2 s, 50 control ticks per second)</th></tr>
+          <tr class="robot-only"><td>ticks with a pose · dropped ticks</td><td id="r-rticks">–</td></tr>
+          <tr class="robot-only"><td>compute per tick · retargeting</td><td id="r-rcpu">–</td></tr>
+          <tr class="robot-only"><td>retargeting error, arms</td><td id="r-rerr">–</td></tr>
+          <tr class="robot-only"><td title="The limiter keeps joint targets inside each joint's range, speed limit and acceleration limit. Motion already inside them passes unchanged.">ticks changed by the limiter · largest change</td><td id="r-rlim">–</td></tr>
+          <tr class="robot-only"><td>arm tracking error (RMS)</td><td id="r-rtrack">–</td></tr>
+          <tr class="robot-only"><td>ticks with a motor at its torque limit</td><td id="r-rsat">–</td></tr>
+          <tr class="robot-only"><td>pelvis tilt · height</td><td id="r-rbal">–</td></tr>
+          <tr class="robot-only"><th colspan="2" title="The robot's arms and torso driven by the bot's turn cue messages (turn-cue-protocol.md), when the bot sends no poses">turn cues</th></tr>
+          <tr class="robot-only"><td title="cues: the bot's messages; audio fallback: only the sound heard (?cues=audio in the page address); off: ?cues=off">driven by</td><td id="r-cmode">–</td></tr>
+          <tr class="robot-only"><td title="Sound lag: how much later the bot's sound is heard here than its cue message says, measured from the sound itself. After it: the loudspeaker's delay as Chrome reports it, plus the trim slider above (positive: the robot moves later).">sound lag · loudspeaker and manual trim</td><td id="r-cclock">–</td></tr>
+          <tr class="robot-only"><td>bot's turn · state</td><td id="r-cstate">–</td></tr>
+          <tr class="robot-only"><td title="The newest movement: what, how long after it should have started it did, and how long after its command the limb was in place">last movement · late start · body lag</td><td id="r-cmove">–</td></tr>
+          <tr><th colspan="2">server (per 80 ms step)</th></tr>
+          <tr><td>speech / motion / step ms</td><td id="r-srv">–</td></tr>
+          <tr><td>speech queue · motion queue · dropped · bytes/s</td><td id="r-srv2">–</td></tr>
+        </tbody>
+      </table>
+      <div id="log"></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

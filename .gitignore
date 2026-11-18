@@ -1,0 +1,16 @@
+.DS_Store
+server/.env
+server/.venv/
+server/out/
+**/__pycache__/
+.pytest_cache/
+web/node_modules/
+web/dist/
+web/third_party/
+web/public/g1
+web/public/basis/
+web/public/test-audio/
+web/.bot-url*
+*.egg-info/
+web/public/*.vrm
+!web/public/riki_minami.vrm

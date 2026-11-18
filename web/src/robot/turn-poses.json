@@ -1,0 +1,12 @@
+{
+  "about": "Key poses for the turn cues on the Unitree G1. Joint angles in radians, by MuJoCo joint name. On the G1 an elbow angle of 0 holds the forearm level, at a right angle to the upper arm; larger angles lower it toward a straight arm. Joints not listed keep the model's 'stand' keyframe. 'rest' is listening, 'ready' is the arms in front of the body for the bid and while speaking, and 'turn' is added to either while speaking: the torso turned a little away from the person. Shared by the browser realizer (src/robot/turn-realizer.js) and, later, the Python robot client.",
+  "rest": {
+    "left_shoulder_pitch_joint": 0.15, "left_shoulder_roll_joint": 0.15, "left_shoulder_yaw_joint": 0.0, "left_elbow_joint": 1.1,
+    "right_shoulder_pitch_joint": 0.15, "right_shoulder_roll_joint": -0.15, "right_shoulder_yaw_joint": 0.0, "right_elbow_joint": 1.1
+  },
+  "ready": {
+    "left_shoulder_pitch_joint": -0.4, "left_shoulder_roll_joint": 0.2, "left_shoulder_yaw_joint": -0.1, "left_elbow_joint": 0.1,
+    "right_shoulder_pitch_joint": -0.4, "right_shoulder_roll_joint": -0.2, "right_shoulder_yaw_joint": 0.1, "right_elbow_joint": 0.1
+  },
+  "turn": { "waist_yaw_joint": 0.22 }
+}

@@ -1,0 +1,29 @@
+:root { color-scheme: dark; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+body { margin: 0; background: #0d0f12; color: #d8dde3; overflow: hidden; }
+#views { position: fixed; inset: 0 404px 0 0; display: flex; }
+.pane { flex: 1 1 0; min-width: 0; position: relative; overflow: hidden; border-right: 1px solid #1c2026; }
+.pane canvas { display: block; }
+.pane[hidden] { display: none; }
+body:not(.show-robot) .robot-only, body:not(.show-avatar) .avatar-only { display: none; }
+.pane .label { position: absolute; top: 10px; left: 12px; z-index: 1; color: #9aa4b1; pointer-events: none; }
+@media (max-width: 900px) { #views { inset: 0 0 50% 0; } #panel { top: auto; bottom: 0; right: 0; left: 0; width: auto; max-height: 50%; border-radius: 0; } }
+#panel {
+  position: fixed; top: 12px; right: 12px; width: 380px; max-height: calc(100vh - 24px);
+  overflow: auto; background: rgba(16, 18, 22, 0.88); border: 1px solid #2a2f36; border-radius: 8px;
+  padding: 10px 12px; backdrop-filter: blur(6px);
+}
+h1 { font-size: 14px; margin: 0 0 8px; }
+.muted { color: #7b8390; font-weight: normal; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 6px 0; }
+button { background: #1e3a5f; color: #e6edf5; border: 1px solid #2d5684; border-radius: 5px; padding: 5px 10px; cursor: pointer; }
+button:disabled { opacity: 0.4; cursor: default; }
+.pill { padding: 2px 8px; border-radius: 10px; background: #2a2f36; }
+.pill.ready { background: #1f5c3a; }
+.pill.error { background: #6b2323; }
+#mic-meter { flex: 1 1 60px; height: 8px; min-width: 60px; background: #2a2f36; border-radius: 4px; overflow: hidden; }
+#mic-bar { display: block; height: 100%; width: 0; background: #3fae6f; }
+table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+th { text-align: left; color: #8fb3d9; padding: 6px 0 2px; font-weight: 600; }
+td { padding: 2px 0; vertical-align: top; }
+td:first-child { color: #9aa4b1; width: 55%; }
+#log { margin-top: 8px; max-height: 120px; overflow: auto; color: #9aa4b1; white-space: pre-wrap; }

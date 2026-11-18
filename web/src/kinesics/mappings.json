@@ -1,0 +1,83 @@
+{
+  "about": "Client-side mappings from what the kinesics realizer says a body shows to that body's joints or bones. The bot does not know them: a client picks one per session. Each target is its rest value plus the sum of gain x source, in degrees. Sources (kinesics/mapping.js): head_away and eye_away (degrees away from the partner, unsigned), head_away_sided and eye_away_sided (the same, signed to the side the body looks away to), head_pitch (degrees, chin up positive), live_yaw and live_pitch (the small continuous motion, degrees), torso_lean (degrees, towards the partner positive), hand (0 = at rest, 1 = raised), blink (0 to 1), mouth (the resting mouth posture, 0 = closed, 1 = the usual opening while speaking), const (always 1). Every gain is chosen, not measured; kinesics-profiles.md, section 4, says why each has its value.",
+  "version": 1,
+  "g1": {
+    "about": "Unitree G1: targets are MuJoCo joint names; positive waist_pitch leans forward. Rest is the stand pose with the arms of robot/turn-poses.json.",
+    "default": "forward",
+    "side": {
+      "about": "The look away is a waist turn to the side, at 40% of the head's and the eyes' angles. The human torso lean and the small continuous motion are not shown.",
+      "head_returns_with_eyes": true,
+      "targets": {
+        "waist_yaw_joint": { "head_away_sided": 0.4, "eye_away_sided": 0.4 },
+        "waist_pitch_joint": { "head_pitch": -1.0 },
+        "right_shoulder_pitch_joint": { "hand": -11.5 },
+        "right_elbow_joint": { "hand": -31.5 }
+      }
+    },
+    "forward": {
+      "about": "The look away is a forward bend at the waist, so the chest keeps facing the partner: 40% of the head's and the eyes' angles, on top of the lean from the head's pitch.",
+      "head_returns_with_eyes": true,
+      "targets": {
+        "waist_pitch_joint": { "head_pitch": -1.0, "head_away": 0.4, "eye_away": 0.4 },
+        "right_shoulder_pitch_joint": { "hand": -11.5 },
+        "right_elbow_joint": { "hand": -31.5 }
+      }
+    }
+  },
+  "vrm": {
+    "about": "A VRM avatar: targets are bone.axis of the normalized humanoid bones (the model faces +Z, +X is its left; chin up is a negative rotation about x), plus eyes.yaw, eyes.pitch (degrees, for the model's look-at), blink, and mouth (the model's open-mouth expression, 0 to 1: the resting posture, under the lip movement).",
+    "default": "natural",
+    "natural": {
+      "about": "Neck 40% and head 60% of each head angle; the small continuous motion at a quarter of its measured size; arms hanging, the right forearm raised by the hand.",
+      "head_returns_with_eyes": false,
+      "targets": {
+        "neck.y": { "head_away_sided": 0.4, "live_yaw": 0.1 },
+        "neck.x": { "head_pitch": -0.4, "live_pitch": -0.1 },
+        "head.y": { "head_away_sided": 0.6, "live_yaw": 0.15 },
+        "head.x": { "head_pitch": -0.6, "live_pitch": -0.15 },
+        "spine.x": { "torso_lean": 1.0 },
+        "leftUpperArm.z": { "const": -72 },
+        "leftLowerArm.y": { "const": -12 },
+        "rightUpperArm.z": { "const": 72 },
+        "rightUpperArm.x": { "hand": -12 },
+        "rightLowerArm.y": { "const": 12, "hand": 52 },
+        "leftHand.z": { "const": -8 },
+        "leftHand.y": { "const": 5 },
+        "rightHand.z": { "const": 8, "hand": -4 },
+        "rightHand.y": { "const": -5 },
+        "leftThumbMetacarpal.x": { "const": 15 },
+        "leftThumbProximal.y": { "const": 8 },
+        "rightThumbMetacarpal.x": { "const": 15 },
+        "rightThumbProximal.y": { "const": -8 },
+        "leftIndexProximal.z": { "const": -12 },
+        "leftIndexIntermediate.z": { "const": -18 },
+        "leftIndexDistal.z": { "const": -10 },
+        "leftMiddleProximal.z": { "const": -15 },
+        "leftMiddleIntermediate.z": { "const": -22 },
+        "leftMiddleDistal.z": { "const": -12 },
+        "leftRingProximal.z": { "const": -18 },
+        "leftRingIntermediate.z": { "const": -26 },
+        "leftRingDistal.z": { "const": -14 },
+        "leftLittleProximal.z": { "const": -22 },
+        "leftLittleIntermediate.z": { "const": -30 },
+        "leftLittleDistal.z": { "const": -16 },
+        "rightIndexProximal.z": { "const": 12, "hand": -4 },
+        "rightIndexIntermediate.z": { "const": 18, "hand": -6 },
+        "rightIndexDistal.z": { "const": 10, "hand": -3.3 },
+        "rightMiddleProximal.z": { "const": 15, "hand": -5 },
+        "rightMiddleIntermediate.z": { "const": 22, "hand": -7.3 },
+        "rightMiddleDistal.z": { "const": 12, "hand": -4 },
+        "rightRingProximal.z": { "const": 18, "hand": -6 },
+        "rightRingIntermediate.z": { "const": 26, "hand": -8.7 },
+        "rightRingDistal.z": { "const": 14, "hand": -4.7 },
+        "rightLittleProximal.z": { "const": 22, "hand": -7.3 },
+        "rightLittleIntermediate.z": { "const": 30, "hand": -10 },
+        "rightLittleDistal.z": { "const": 16, "hand": -5.3 },
+        "eyes.yaw": { "eye_away_sided": 1.0 },
+        "eyes.pitch": {},
+        "blink": { "blink": 1.0 },
+        "mouth": { "mouth": 0.8 }
+      }
+    }
+  }
+}
